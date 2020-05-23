@@ -76,6 +76,7 @@ impl PlexWebApi {
 #[cfg(test)]
 mod test {
     use super::PlexWebApi;
+    use crate::web_api::models::Directory;
 
     fn create_api() -> PlexWebApi {
         let url = env!("PLEX_BASE_URL");
@@ -109,35 +110,32 @@ mod test {
         let api = create_api();
 
         let sections = api.library_sections().await.unwrap();
-        let mut errors = 0;
-        let directories = sections.directories;
-        let mut next_directories = Vec::new();
-        for directory in directories {
-            let res = api.library_section(directory.key).await;
-            if let Ok(section) = res {
-                let mut dirs = section.directory.clone();
-                next_directories.append(&mut dirs);
-            }else {
-                println!("{:?}", &res);
-                errors += 1;
-            }
-        }
-        let mut directories = next_directories;
-        for _ in 0..1 {
-            let mut next_directories = Vec::new();
-            for directory in directories {
-                let res = api.library_section(directory.key).await;
-                if let Ok(section) = res {
-                    let mut dirs = section.directory.clone();
-                    next_directories.append(&mut dirs);
-                }else {
-                    println!("{:?}", &res);
-                    errors += 1;
-                }
-            }
-            directories = next_directories;
+        let mut errors = 0u64;
+        let directories = sections.directories.into_iter().map(|dir| (String::new(), dir)).collect();
+        let mut directories = iterate_directories(&api, &mut errors, directories).await;
+        for _ in 0..2 {
+            directories = iterate_directories(&api, &mut errors, directories).await;
         }
 
         assert_eq!(errors, 0);
+    }
+
+    async fn iterate_directories(api: &PlexWebApi, errors: &mut u64, directories: Vec<(String, Directory)>) -> Vec<(String, Directory)> {
+        let mut next_directories = Vec::new();
+        for (prefix, directory) in directories {
+            let key = if prefix.is_empty() { directory.key() } else {
+                format!("{}/{}", prefix, directory.key())
+            };
+            let res = api.library_section(&key).await;
+            if let Ok(section) = res {
+                let mut dirs = section.directory.clone().into_iter().map(|dir| (key.clone(), dir)).collect();
+                next_directories.append(&mut dirs);
+            }else {
+                println!("{} => {:?}", &key, &res);
+                *errors += 1;
+            }
+        }
+
+        next_directories
     }
 }

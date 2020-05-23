@@ -54,11 +54,11 @@ pub struct ServerInfo {
     pub version: String,
     pub voice_search: bool,
     #[serde(rename = "Directory")]
-    pub directory: Vec<Directory>,
+    pub directory: Vec<ServerInfoDirectory>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Directory {
+pub struct ServerInfoDirectory {
     pub count: i64,
     pub key: String,
     pub title: String,
