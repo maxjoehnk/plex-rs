@@ -1,0 +1,65 @@
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ServerInfo {
+    pub size: i64,
+    pub allow_camera_upload: bool,
+    pub allow_channel_access: bool,
+    pub allow_media_deletion: bool,
+    pub allow_sharing: bool,
+    pub allow_sync: bool,
+    pub allow_tuners: bool,
+    pub background_processing: bool,
+    pub certificate: bool,
+    pub companion_proxy: bool,
+    pub country_code: String,
+    pub diagnostics: String,
+    pub event_stream: bool,
+    pub friendly_name: String,
+    pub hub_search: bool,
+    pub item_clusters: bool,
+    pub livetv: i64,
+    pub machine_identifier: String,
+    pub media_providers: bool,
+    pub multiuser: bool,
+    pub my_plex: bool,
+    pub my_plex_mapping_state: String,
+    pub my_plex_signin_state: String,
+    pub my_plex_subscription: bool,
+    pub my_plex_username: String,
+    pub owner_features: String,
+    pub photo_auto_tag: bool,
+    pub platform: String,
+    pub platform_version: String,
+    pub plugin_host: bool,
+    pub push_notifications: bool,
+    pub read_only_libraries: bool,
+    pub request_parameters_in_cookie: bool,
+    #[serde(rename = "streamingBrainABRVersion")]
+    pub streaming_brain_abr_version: i64,
+    pub streaming_brain_version: i64,
+    pub sync: bool,
+    pub transcoder_active_video_sessions: i64,
+    pub transcoder_audio: bool,
+    pub transcoder_lyrics: bool,
+    pub transcoder_photo: bool,
+    pub transcoder_subtitles: bool,
+    pub transcoder_video: bool,
+    pub transcoder_video_bitrates: String,
+    pub transcoder_video_qualities: String,
+    pub transcoder_video_resolutions: String,
+    pub updated_at: i64,
+    pub updater: bool,
+    pub version: String,
+    pub voice_search: bool,
+    #[serde(rename = "Directory")]
+    pub directory: Vec<Directory>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Directory {
+    pub count: i64,
+    pub key: String,
+    pub title: String,
+}
