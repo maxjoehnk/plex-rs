@@ -199,6 +199,8 @@ pub struct AlbumMetadatum {
     pub genre: Vec<Tag>,
     #[serde(rename = "Director", default)]
     pub director: Vec<Tag>,
+    #[serde(rename = "Collection", default)]
+    pub collections: Vec<Tag>,
     pub title_sort: Option<String>,
     pub art: Option<String>,
     #[serde(default)]
@@ -289,6 +291,8 @@ pub struct MovieMetadatum {
     pub collections: Vec<Tag>,
     #[serde(rename = "Role", default)]
     pub roles: Vec<Tag>,
+    #[serde(default)]
+    pub view_count: u64,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
