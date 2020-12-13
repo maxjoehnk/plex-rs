@@ -1,9 +1,10 @@
 use reqwest::{Client, RequestBuilder};
-use failure::Error;
 
+use self::error::Error;
 use self::models::*;
 
 pub mod models;
+pub mod error;
 
 #[derive(Debug, Clone)]
 pub struct PlexWebApi {
